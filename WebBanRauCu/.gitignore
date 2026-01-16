@@ -9,6 +9,7 @@
 bin/
 obj/
 
+
 # Rider / VS Code
 .idea/
 .vscode/
@@ -16,3 +17,5 @@ obj/
 # OS
 Thumbs.db
 .DS_Store
+
+appsettings*.json
