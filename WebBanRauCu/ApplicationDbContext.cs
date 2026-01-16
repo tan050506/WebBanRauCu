@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebBanRauCu.Models; // Nhớ đổi tên namespace theo project của bạn
 
-public class ApplicationDbContext : IdentityDbContext
+public class ApplicationDbContext : IdentityDbContext<AppUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -14,4 +14,14 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderDetail> OrderDetails { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        // Cấu hình kiểu dữ liệu decimal cho TotalAmount trong bảng Order
+        builder.Entity<Order>()
+            .Property(o => o.TotalAmount)
+            .HasColumnType("decimal(18,2)"); // 18 chữ số, 2 chữ số sau dấu phẩy
+    }
 }

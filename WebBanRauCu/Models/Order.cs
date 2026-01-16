@@ -24,7 +24,7 @@ namespace WebBanRauCu.Models
         // Liên kết với tài khoản User (Identity)
         public string? UserId { get; set; }
         [ForeignKey("UserId")]
-        public IdentityUser? User { get; set; }
+        public AppUser? User { get; set; }
 
         // Một đơn hàng có nhiều chi tiết
         public List<OrderDetail> OrderDetails { get; set; }

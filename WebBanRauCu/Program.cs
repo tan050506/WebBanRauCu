@@ -12,10 +12,19 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// 2. Cấu hình Identity (Đăng nhập/Đăng ký)
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
+// 2. Cấu hình Identity (Sử dụng AddIdentity thay vì AddDefaultIdentity)
+builder.Services.AddIdentity<AppUser, IdentityRole>(options => {
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireDigit = false; // Tùy chỉnh độ khó password nếu cần
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
+
+// Đăng ký Razor Pages (Identity mặc định cần cái này)
+builder.Services.AddRazorPages();
 
 // 3. Đăng ký dịch vụ Session (QUAN TRỌNG)
 builder.Services.AddSession(options =>
@@ -58,4 +67,13 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await SeedData.Initialize(services);
+}
+
+app.Run();
+
+app.MapRazorPages();
 app.Run();
