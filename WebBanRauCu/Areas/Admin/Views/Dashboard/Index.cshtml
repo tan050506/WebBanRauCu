@@ -3,18 +3,18 @@
 }
 
 <div class="container-fluid py-4">
-    <h1 class="text-center mb-5 text-uppercase fw-bold text-primary">Hệ thống quản trị WebBanRauCu</h1>
+    <h1 class="text-center mb-5 text-uppercase fw-bold text-primary">CẤU TRÚC HỆ THÔNG</h1>
 
     <div class="row">
         <div class="col-md-4 mb-4">
             <div class="card shadow h-100 border-left-primary">
-                <div class="card-body text-center">
+                <div class="card-body text-center p-4">
                     <div class="fs-1 text-primary mb-3">
                         <i class="bi bi-box-seam"></i>
                     </div>
                     <h3 class="card-title text-uppercase fw-bold">Sản phẩm</h3>
                     <p class="card-text text-muted">Thêm, sửa, xóa và cập nhật hình ảnh sản phẩm.</p>
-                    <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="btn btn-primary w-100 mt-2">
+                    <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="btn btn-primary w-100 mt-2 py-2">
                         Quản lý ngay
                     </a>
                 </div>
@@ -23,13 +23,13 @@
 
         <div class="col-md-4 mb-4">
             <div class="card shadow h-100 border-left-success">
-                <div class="card-body text-center">
+                <div class="card-body text-center p-4">
                     <div class="fs-1 text-success mb-3">
                         <i class="bi bi-tags"></i>
                     </div>
                     <h3 class="card-title text-uppercase fw-bold">Danh mục</h3>
                     <p class="card-text text-muted">Quản lý các loại rau củ, trái cây...</p>
-                    <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="btn btn-success w-100 mt-2">
+                    <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="btn btn-success w-100 mt-2 py-2">
                         Quản lý ngay
                     </a>
                 </div>
@@ -38,13 +38,13 @@
 
         <div class="col-md-4 mb-4">
             <div class="card shadow h-100 border-left-warning">
-                <div class="card-body text-center">
+                <div class="card-body text-center p-4">
                     <div class="fs-1 text-warning mb-3">
                         <i class="bi bi-receipt"></i>
                     </div>
                     <h3 class="card-title text-uppercase fw-bold">Đơn hàng</h3>
                     <p class="card-text text-muted">Xem đơn mới, cập nhật trạng thái giao hàng.</p>
-                    <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="btn btn-warning text-dark w-100 mt-2">
+                    <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="btn btn-warning text-dark w-100 mt-2 py-2">
                         Quản lý ngay
                     </a>
                 </div>
@@ -52,10 +52,10 @@
         </div>
     </div>
 
-    <div class="row mt-5">
+    <div class="row mt-4">
         <div class="col-12 text-center">
-            <div class="alert alert-info">
-                Chào mừng trở lại! Bạn đang đăng nhập với quyền <strong>Quản trị viên (Admin)</strong>.
+            <div class="alert alert-info border-0 shadow-sm">
+                <i class="bi bi-info-circle me-2"></i> Chào mừng trở lại! Bạn đang quản trị hệ thống với phiên đăng nhập <strong>@User.Identity?.Name</strong>.
             </div>
         </div>
     </div>

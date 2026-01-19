@@ -1,0 +1,14 @@
+.category-item {
+    /* Sử dụng biến hue để tự động tạo màu nền và chữ */
+    background-color: hsl(var(--category-hue), 70%, 95%) !important;
+    color: hsl(var(--category-hue), 80%, 25%) !important;
+    border-left: 5px solid hsl(var(--category-hue), 70%, 50%) !important;
+    margin-bottom: 4px;
+    border-radius: 0 5px 5px 0 !important;
+    transition: all 0.3s ease;
+}
+
+.category-item:hover {
+    background-color: hsl(var(--category-hue), 70%, 90%) !important;
+    transform: translateX(5px);
+}

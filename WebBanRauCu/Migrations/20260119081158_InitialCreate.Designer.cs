@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace WebBanRauCu.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260119034222_UpdateOrder")]
-    partial class UpdateOrder
+    [Migration("20260119081158_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

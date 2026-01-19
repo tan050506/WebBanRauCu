@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using WebBanRauCu.Models; // Đảm bảo có namespace này nếu cần
+using WebBanRauCu.Models; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // 2. Cấu hình Identity (Sử dụng AddIdentity thay vì AddDefaultIdentity)
 builder.Services.AddIdentity<AppUser, IdentityRole>(options => {
     options.SignIn.RequireConfirmedAccount = false;
-    options.Password.RequireDigit = false; // Tùy chỉnh độ khó password nếu cần
+    options.Password.RequireDigit = false; 
     options.Password.RequiredLength = 6;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
@@ -29,7 +29,7 @@ builder.Services.AddRazorPages();
 // 3. Đăng ký dịch vụ Session (QUAN TRỌNG)
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian giữ giỏ hàng: 30 phút
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
