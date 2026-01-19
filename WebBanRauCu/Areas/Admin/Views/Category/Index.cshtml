@@ -23,7 +23,7 @@
                     <tr>
                         <th>Tên danh mục</th>
                         <th>Thứ tự hiển thị</th>
-                        <th class="text-center">Thao tác</th>
+                        <th class="text-center" style="width: 250px;">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,9 +33,14 @@
                             <td class="fw-bold">@item.Name</td>
                             <td><span class="badge bg-light text-dark border">@item.DisplayOrder</span></td>
                             <td class="text-center">
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning me-1">
                                     <i class="bi bi-pencil"></i> Sửa
                                 </a>
+
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white me-1">
+                                    <i class="bi bi-info-circle"></i> Chi tiết
+                                </a>
+
                                 <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">
                                     <i class="bi bi-trash"></i> Xóa
                                 </a>

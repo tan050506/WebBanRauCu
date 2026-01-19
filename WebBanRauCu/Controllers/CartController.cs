@@ -13,6 +13,9 @@ namespace WebBanRauCu.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
 
+        // Tên Session Key dùng chung cho toàn bộ Controller
+        private const string CART_KEY = "GioHang";
+
         public CartController(ApplicationDbContext context, UserManager<AppUser> userManager)
         {
             _context = context;
@@ -22,14 +25,14 @@ namespace WebBanRauCu.Controllers
         // Xem giỏ hàng
         public IActionResult Index()
         {
-            var cart = HttpContext.Session.Get<List<CartItem>>("GioHang") ?? new List<CartItem>();
+            var cart = HttpContext.Session.Get<List<CartItem>>(CART_KEY) ?? new List<CartItem>();
             return View(cart);
         }
 
         // Thêm vào giỏ hàng
         public IActionResult AddToCart(int id)
         {
-            var cart = HttpContext.Session.Get<List<CartItem>>("GioHang") ?? new List<CartItem>();
+            var cart = HttpContext.Session.Get<List<CartItem>>(CART_KEY) ?? new List<CartItem>();
             var item = cart.FirstOrDefault(p => p.ProductId == id);
 
             if (item != null)
@@ -52,32 +55,53 @@ namespace WebBanRauCu.Controllers
                 }
             }
 
-            HttpContext.Session.Set("GioHang", cart);
+            HttpContext.Session.Set(CART_KEY, cart);
+            return RedirectToAction("Index");
+        }
+
+        // Tăng/Giảm số lượng sản phẩm (Đã sửa lỗi Session Key)
+        public IActionResult UpdateQuantity(int id, int amount)
+        {
+            var cart = HttpContext.Session.Get<List<CartItem>>(CART_KEY) ?? new List<CartItem>();
+            var item = cart.FirstOrDefault(p => p.ProductId == id);
+
+            if (item != null)
+            {
+                item.Quantity += amount;
+                if (item.Quantity <= 0)
+                {
+                    cart.Remove(item); // Nếu giảm xuống 0 hoặc âm thì xóa khỏi giỏ
+                }
+            }
+
+            HttpContext.Session.Set(CART_KEY, cart);
             return RedirectToAction("Index");
         }
 
         // Xóa sản phẩm khỏi giỏ
         public IActionResult Remove(int id)
         {
-            var cart = HttpContext.Session.Get<List<CartItem>>("GioHang");
-            var item = cart.FirstOrDefault(p => p.ProductId == id);
-            if (item != null)
+            var cart = HttpContext.Session.Get<List<CartItem>>(CART_KEY);
+            if (cart != null)
             {
-                cart.Remove(item);
-                HttpContext.Session.Set("GioHang", cart);
+                var item = cart.FirstOrDefault(p => p.ProductId == id);
+                if (item != null)
+                {
+                    cart.Remove(item);
+                    HttpContext.Session.Set(CART_KEY, cart);
+                }
             }
             return RedirectToAction("Index");
         }
 
         // ==========================================
-        // KHU VỰC THANH TOÁN (ĐÃ SỬA LẠI LOGIC VALIDATION)
+        // KHU VỰC THANH TOÁN
         // ==========================================
 
-        // BƯỚC 1: Hiển thị form xác nhận thông tin (GET)
         [HttpGet]
         public async Task<IActionResult> Checkout()
         {
-            var cart = HttpContext.Session.Get<List<CartItem>>("GioHang");
+            var cart = HttpContext.Session.Get<List<CartItem>>(CART_KEY);
             if (cart == null || cart.Count == 0)
             {
                 return RedirectToAction("Index");
@@ -86,7 +110,6 @@ namespace WebBanRauCu.Controllers
             ViewBag.Cart = cart;
             ViewBag.Total = cart.Sum(item => item.Total);
 
-            // Lấy thông tin user hiện tại để điền sẵn vào form
             var user = await _userManager.GetUserAsync(User);
             var order = new Order
             {
@@ -98,39 +121,29 @@ namespace WebBanRauCu.Controllers
             return View(order);
         }
 
-        // BƯỚC 2: Xử lý khi người dùng nhấn nút "Đặt hàng" (POST)
         [HttpPost]
         public async Task<IActionResult> Checkout(Order order)
         {
-            var cart = HttpContext.Session.Get<List<CartItem>>("GioHang");
+            var cart = HttpContext.Session.Get<List<CartItem>>(CART_KEY);
             if (cart == null || cart.Count == 0) return RedirectToAction("Index");
 
             var user = await _userManager.GetUserAsync(User);
 
-            // --- ĐOẠN CODE QUAN TRỌNG VỪA THÊM VÀO ---
-            // Kiểm tra tính hợp lệ của dữ liệu (Rỗng, SĐT sai định dạng...)
             if (!ModelState.IsValid)
             {
-                // Nếu sai: Nạp lại thông tin giỏ hàng vào ViewBag để hiển thị lại View
                 ViewBag.Cart = cart;
                 ViewBag.Total = cart.Sum(item => item.Total);
-
-                // Trả về View cũ kèm thông báo lỗi
                 return View(order);
             }
-            // ------------------------------------------
 
-            // Gán thêm các dữ liệu hệ thống tự động
             order.UserId = user.Id;
             order.OrderDate = DateTime.Now;
             order.TotalAmount = (decimal)cart.Sum(i => i.Total);
-            order.Status = 1; // 1: Đang xử lý
+            order.Status = 1; 
 
-            // Lưu thông tin đơn hàng chính
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            // Lưu chi tiết đơn hàng
             foreach (var item in cart)
             {
                 var orderDetail = new OrderDetail
@@ -145,7 +158,7 @@ namespace WebBanRauCu.Controllers
             await _context.SaveChangesAsync();
 
             // Xóa giỏ hàng sau khi đặt thành công
-            HttpContext.Session.Remove("GioHang");
+            HttpContext.Session.Remove(CART_KEY);
 
             return RedirectToAction("MyOrders");
         }
@@ -154,6 +167,8 @@ namespace WebBanRauCu.Controllers
         public async Task<IActionResult> MyOrders()
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Index", "Home");
+
             var orders = await _context.Orders
                                        .Where(o => o.UserId == user.Id)
                                        .OrderByDescending(o => o.OrderDate)

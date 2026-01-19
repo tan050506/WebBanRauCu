@@ -3,48 +3,70 @@
 }
 
 <div class="container-fluid py-4">
-    <h1 class="text-center mb-5 text-uppercase fw-bold text-primary">CẤU TRÚC HỆ THÔNG</h1>
+    <h1 class="text-center mb-5 text-uppercase fw-bold text-primary" style="letter-spacing: 1px;">
+        CẤU TRÚC HỆ THỐNG QUẢN TRỊ
+    </h1>
 
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card shadow h-100 border-left-primary">
-                <div class="card-body text-center p-4">
-                    <div class="fs-1 text-primary mb-3">
-                        <i class="bi bi-box-seam"></i>
+        <div class="row mt-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm overflow-hidden rounded-3 position-relative">
+                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=2574&auto=format&fit=crop" 
+                     alt="Vegetables Banner" 
+                     class="w-100" 
+                     style="height: 350px; object-fit: cover; filter: brightness(0.8);">
+                
+                <div class="position-absolute top-50 start-50 translate-middle text-center text-white w-100">
+                    <h2 class="fw-bold text-uppercase mb-2" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">
+                        Nông Sản Việt - Chất Lượng Vàng
+                    </h2>
+                    <p class="fs-5" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">
+                        Hệ thống quản lý kho vận và bán hàng tập trung
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-0 hover-scale" style="transition: transform 0.3s;">
+                <div class="card-body text-center p-5">
+                    <div class="mb-3 text-primary">
+                        <i class="bi bi-box-seam" style="font-size: 3rem;"></i>
                     </div>
-                    <h3 class="card-title text-uppercase fw-bold">Sản phẩm</h3>
-                    <p class="card-text text-muted">Thêm, sửa, xóa và cập nhật hình ảnh sản phẩm.</p>
-                    <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="btn btn-primary w-100 mt-2 py-2">
+                    <h3 class="card-title fw-bold text-uppercase">Sản phẩm</h3>
+                    <p class="text-muted mb-4">Thêm, sửa, xóa và cập nhật hình ảnh sản phẩm.</p>
+                    <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="btn btn-primary w-100 py-2 rounded-pill">
                         Quản lý ngay
                     </a>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card shadow h-100 border-left-success">
-                <div class="card-body text-center p-4">
-                    <div class="fs-1 text-success mb-3">
-                        <i class="bi bi-tags"></i>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-0 hover-scale" style="transition: transform 0.3s;">
+                <div class="card-body text-center p-5">
+                    <div class="mb-3 text-success">
+                        <i class="bi bi-tags" style="font-size: 3rem;"></i>
                     </div>
-                    <h3 class="card-title text-uppercase fw-bold">Danh mục</h3>
-                    <p class="card-text text-muted">Quản lý các loại rau củ, trái cây...</p>
-                    <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="btn btn-success w-100 mt-2 py-2">
+                    <h3 class="card-title fw-bold text-uppercase">Danh mục</h3>
+                    <p class="text-muted mb-4">Quản lý các loại rau củ, trái cây, phân loại hàng.</p>
+                    <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="btn btn-success w-100 py-2 rounded-pill">
                         Quản lý ngay
                     </a>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card shadow h-100 border-left-warning">
-                <div class="card-body text-center p-4">
-                    <div class="fs-1 text-warning mb-3">
-                        <i class="bi bi-receipt"></i>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-0 hover-scale" style="transition: transform 0.3s;">
+                <div class="card-body text-center p-5">
+                    <div class="mb-3 text-warning">
+                        <i class="bi bi-receipt" style="font-size: 3rem;"></i>
                     </div>
-                    <h3 class="card-title text-uppercase fw-bold">Đơn hàng</h3>
-                    <p class="card-text text-muted">Xem đơn mới, cập nhật trạng thái giao hàng.</p>
-                    <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="btn btn-warning text-dark w-100 mt-2 py-2">
+                    <h3 class="card-title fw-bold text-uppercase">Đơn hàng</h3>
+                    <p class="text-muted mb-4">Xem đơn mới, cập nhật trạng thái giao hàng.</p>
+                    <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="btn btn-warning text-dark w-100 py-2 rounded-pill">
                         Quản lý ngay
                     </a>
                 </div>
@@ -52,11 +74,14 @@
         </div>
     </div>
 
-    <div class="row mt-4">
-        <div class="col-12 text-center">
-            <div class="alert alert-info border-0 shadow-sm">
-                <i class="bi bi-info-circle me-2"></i> Chào mừng trở lại! Bạn đang quản trị hệ thống với phiên đăng nhập <strong>@User.Identity?.Name</strong>.
-            </div>
-        </div>
-    </div>
+
+
 </div>
+
+<style>
+    /* Hiệu ứng trôi nhẹ khi di chuột vào ô chức năng */
+    .hover-scale:hover {
+        transform: translateY(-5px) !important;
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+    }
+</style>
