@@ -5,32 +5,38 @@
 
 <div class="container py-4">
     <div class="card shadow col-md-6 mx-auto">
-        <div class="card-header bg-success text-white">
-            <h4 class="mb-0">Thêm danh mục mới</h4>
+        <div class="card-header bg-warning text-dark">
+            <h4 class="mb-0 fw-bold">Cập nhật danh mục</h4>
         </div>
         <div class="card-body">
-            <form asp-action="Create">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <input type="hidden" asp-for="Id" />
+
                 <div class="mb-3">
                     <label class="fw-bold">Tên danh mục</label>
-                    <input asp-for="Name" class="form-control" placeholder="Ví dụ: Rau củ, Trái cây..." />
+                    <input asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
+
                 <div class="mb-3">
                     <label class="fw-bold">Thứ tự hiển thị</label>
-                    <input asp-for="DisplayOrder" class="form-control" type="number" min="1" />
+                    <input asp-for="DisplayOrder" class="form-control" type="number" />
                     <span asp-validation-for="DisplayOrder" class="text-danger"></span>
                 </div>
+
                 <div class="text-end">
                     <a asp-action="Index" class="btn btn-secondary">Hủy bỏ</a>
-                    <button type="submit" class="btn btn-success">Lưu lại</button>
+                    <button type="submit" class="btn btn-warning fw-bold">Cập nhật</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
 }
