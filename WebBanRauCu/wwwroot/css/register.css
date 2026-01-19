@@ -1,0 +1,103 @@
+﻿.reg-container {
+    background-image: url('/images/background/vegetable.avif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.reg-form-box {
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    color: white;
+    width: 100%;
+    max-width: 450px;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.reg-title {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.reg-input-group {
+    margin-bottom: 15px;
+}
+
+    .reg-input-group label {
+        display: block;
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+        color: #ccc;
+    }
+
+    .reg-input-group input,
+    .reg-input-group textarea {
+        width: 100%;
+        padding: 10px 14px;
+        font-size: 0.9rem;
+        border-radius: 8px;
+        border: 1px solid #444;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+    }
+
+        .reg-input-group input:focus,
+        .reg-input-group textarea:focus {
+            outline: none;
+            border-color: #0dcaf0;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+.reg-btn-submit {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #0dcaf0 0%, #0d6efd 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: transform 0.2s;
+}
+
+    .reg-btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(13, 202, 240, 0.3);
+    }
+
+.reg-error {
+    font-size: 0.75rem;
+    color: #ff6b6b;
+    margin-top: 4px;
+    display: block;
+}
+
+.reg-footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+    .reg-footer a {
+        color: #0dcaf0;
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+
+        .reg-footer a:hover {
+            text-decoration: underline;
+        }

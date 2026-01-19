@@ -4,48 +4,45 @@
 @{
     ViewData["Title"] = "Login";
 }
-
-<div class="row d-flex align-items-center justify-content-center">
-    <div class="col-md-3 card p-3">
-        <h2 class="text-center text-info">Login</h2>
+@section Styles {
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+}
+<div class="login-container">
+    <div class="login-form">
+        <h2 class="login-title">Login</h2>
 
         <form asp-action="Login" method="post"
               asp-route-returnurl="@ViewData["ReturnUrl"]">
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="mb-1">
+            <div>
                 <label asp-for="Username" class="control-label"></label>
                 <input asp-for="Username" class="form-control" />
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
 
-            <div class="mb-1">
+            <div>
                 <label asp-for="Password" class="control-label"></label>
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
-            <div class="mb-1 form-check">
-                <label class="form-check-label">
+            <div>
+                <label>
                     <input asp-for="RememberMe" class="form-check-input" />
                     @Html.DisplayNameFor(a => a.RememberMe)
                 </label>
             </div>
 
-            <div class="row">
-                <div class="col-8">
-                    <a asp-action="Register"
-                       asp-route-returnurl="@ViewData["ReturnUrl"]"
-                       class="text-decoration-none float-start mt-2">
-                        Don't have account?
-                    </a>
-                </div>
+            <div class="login-actions">
+                <button type="submit" class="login-btn-submit">Login</button>
 
-                <div class="col-4">
-                    <input type="submit"
-                           value="Login"
-                           class="btn btn-primary btn-sm float-end" />
+                <div class="login-footer">
+                    <a asp-action="Register"
+                       asp-route-returnurl="@ViewData["ReturnUrl"]">
+                        Don't have an account? Register here
+                    </a>
                 </div>
             </div>
         </form>
