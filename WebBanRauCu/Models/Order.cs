@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations; // Thư viện validation
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebBanRauCu.Models
@@ -13,20 +13,24 @@ namespace WebBanRauCu.Models
 
         public decimal TotalAmount { get; set; }
 
-        // Thông tin người nhận (Lưu riêng để đề phòng user đổi địa chỉ sau này)
-        [Required]
+        public int Status { get; set; } = 1; // 1: Đang xử lý
+
+        // --- KIỂM TRA RỖNG ---
+        [Required(ErrorMessage = "Vui lòng nhập tên người nhận")]
         public string CustomerName { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Vui lòng nhập địa chỉ giao hàng")]
         public string Address { get; set; }
-        [Required]
+
+        // --- KIỂM TRA SỐ & RỖNG ---
+        [Required(ErrorMessage = "Vui lòng nhập số điện thoại")]
+        [RegularExpression(@"^0\d{9,10}$", ErrorMessage = "Số điện thoại không hợp lệ (Phải bắt đầu bằng 0 và có 10-11 số)")]
         public string PhoneNumber { get; set; }
 
-        // Liên kết với tài khoản User (Identity)
         public string? UserId { get; set; }
         [ForeignKey("UserId")]
         public AppUser? User { get; set; }
 
-        // Một đơn hàng có nhiều chi tiết
-        public List<OrderDetail> OrderDetails { get; set; }
+        public List<OrderDetail>? OrderDetails { get; set; }
     }
 }

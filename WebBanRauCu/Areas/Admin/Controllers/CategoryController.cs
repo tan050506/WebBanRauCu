@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WebBanRauCu.Models;
 
 namespace WebBanRauCu.Areas.Admin.Controllers
@@ -24,42 +19,46 @@ namespace WebBanRauCu.Areas.Admin.Controllers
         // GET: Admin/Category
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            // Sắp xếp tăng dần theo DisplayOrder
+            return View(await _context.Categories.OrderBy(c => c.DisplayOrder).ToListAsync());
         }
 
-        // GET: Admin/Category/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return View(category);
-        }
-
-        // GET: Admin/Category/Create
+        // GET: Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/Category/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,DisplayOrder")] Category category)
+        public async Task<IActionResult> Create(Category category)
         {
             if (ModelState.IsValid)
             {
+                // 1. Kiểm tra trùng TÊN
+                var isDuplicateName = await _context.Categories.AnyAsync(c => c.Name == category.Name);
+                if (isDuplicateName)
+                {
+                    ModelState.AddModelError("Name", "Tên danh mục này đã tồn tại!");
+                    return View(category);
+                }
+
+                // 2. Kiểm tra trùng THỨ TỰ (Mới thêm)
+                var isDuplicateOrder = await _context.Categories.AnyAsync(c => c.DisplayOrder == category.DisplayOrder);
+                if (isDuplicateOrder)
+                {
+                    ModelState.AddModelError("DisplayOrder", $"Thứ tự số {category.DisplayOrder} đã được sử dụng. Vui lòng chọn số khác!");
+                    return View(category);
+                }
+
+                // 3. Kiểm tra số âm
+                if (category.DisplayOrder < 0)
+                {
+                    ModelState.AddModelError("DisplayOrder", "Thứ tự hiển thị không được là số âm.");
+                    return View(category);
+                }
+
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -67,36 +66,46 @@ namespace WebBanRauCu.Areas.Admin.Controllers
             return View(category);
         }
 
-        // GET: Admin/Category/Edit/5
+        // GET: Edit
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
+            if (id == null) return NotFound();
             var category = await _context.Categories.FindAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
+            if (category == null) return NotFound();
             return View(category);
         }
 
-        // POST: Admin/Category/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DisplayOrder")] Category category)
+        public async Task<IActionResult> Edit(int id, Category category)
         {
-            if (id != category.Id)
-            {
-                return NotFound();
-            }
+            if (id != category.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
+                // 1. Kiểm tra trùng TÊN (Trừ chính nó ra)
+                var isDuplicateName = await _context.Categories.AnyAsync(c => c.Name == category.Name && c.Id != id);
+                if (isDuplicateName)
+                {
+                    ModelState.AddModelError("Name", "Tên danh mục này đã được sử dụng!");
+                    return View(category);
+                }
+
+                // 2. Kiểm tra trùng THỨ TỰ (Mới thêm - Trừ chính nó ra)
+                var isDuplicateOrder = await _context.Categories.AnyAsync(c => c.DisplayOrder == category.DisplayOrder && c.Id != id);
+                if (isDuplicateOrder)
+                {
+                    ModelState.AddModelError("DisplayOrder", $"Thứ tự số {category.DisplayOrder} đang bị trùng với danh mục khác!");
+                    return View(category);
+                }
+
+                if (category.DisplayOrder < 0)
+                {
+                    ModelState.AddModelError("DisplayOrder", "Thứ tự không được âm.");
+                    return View(category);
+                }
+
                 try
                 {
                     _context.Update(category);
@@ -104,56 +113,24 @@ namespace WebBanRauCu.Areas.Admin.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!_context.Categories.Any(e => e.Id == id)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
         }
 
-        // GET: Admin/Category/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return View(category);
-        }
-
-        // POST: Admin/Category/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        // POST: Delete
+        public async Task<IActionResult> Delete(int id)
         {
             var category = await _context.Categories.FindAsync(id);
             if (category != null)
             {
                 _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CategoryExists(int id)
-        {
-            return _context.Categories.Any(e => e.Id == id);
         }
     }
 }

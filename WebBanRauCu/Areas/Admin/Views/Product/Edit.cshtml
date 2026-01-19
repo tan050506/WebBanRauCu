@@ -1,54 +1,80 @@
 ﻿@model WebBanRauCu.Models.Product
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Chỉnh sửa sản phẩm";
 }
 
-<h1>Edit</h1>
+<div class="container-fluid py-4">
+    <div class="card shadow">
+        <div class="card-header bg-warning text-dark">
+            <h4 class="mb-0 fw-bold">CHỈNH SỬA SẢN PHẨM: @Model.Name</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="ImageUrl" /> <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group mb-3">
+                            <label asp-for="Name" class="control-label fw-bold"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
 
-<h4>Product</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label"></label>
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                        <div class="form-group mb-3">
+                            <label asp-for="Price" class="control-label fw-bold"></label>
+                            <input asp-for="Price" class="form-control" type="number" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="CategoryId" class="control-label fw-bold">Danh mục</label>
+                            <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryId"></select>
+                            <span asp-validation-for="CategoryId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Description" class="control-label fw-bold"></label>
+                            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 text-center">
+                        <label class="control-label fw-bold mb-2">Hình ảnh hiện tại</label>
+                        <div class="mb-3">
+                            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                            {
+                                <img src="@Model.ImageUrl" class="img-thumbnail" style="max-height: 250px; width: auto;" alt="Ảnh sản phẩm" />
+                            }
+                            else
+                            {
+                                <div class="alert alert-secondary">Chưa có ảnh</div>
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label fw-bold text-success">Chọn ảnh mới (Nếu muốn thay đổi)</label>
+                            <input type="file" name="file" class="form-control mt-2" accept="image/*" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-4 text-end border-top pt-3">
+                    <a asp-action="Index" class="btn btn-secondary me-2">
+                        <i class="bi bi-arrow-return-left"></i> Quay lại
+                    </a>
+                    <button type="submit" class="btn btn-warning fw-bold px-4">
+                        <i class="bi bi-save"></i> Lưu thay đổi
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

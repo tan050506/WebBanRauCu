@@ -1,0 +1,62 @@
+﻿@model IEnumerable<WebBanRauCu.Models.Order>
+@{
+    ViewData["Title"] = "Quản lý đơn hàng";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-warning fw-bold text-dark">QUẢN LÝ ĐƠN HÀNG</h2>
+        <a asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left-circle"></i> Về Dashboard
+        </a>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body p-0">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-warning text-dark">
+                    <tr>
+                        <th>Mã đơn</th>
+                        <th>Khách hàng</th>
+                        <th>Ngày đặt</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>#@item.Id</td>
+                            <td>
+                                <strong>@item.CustomerName</strong><br />
+                                <small class="text-muted">@item.PhoneNumber</small>
+                            </td>
+                            <td>@item.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="text-danger fw-bold">@item.TotalAmount.ToString("#,##0") đ</td>
+                            <td>
+                                <form asp-action="UpdateStatus" method="post" class="d-flex">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <select name="status" class="form-select form-select-sm" onchange="this.form.submit()"
+                                            style="width: 140px; font-weight: bold;
+                                                background-color: @(item.Status == 3 ? "#d1e7dd" : (item.Status == 0 ? "#f8d7da" : "#fff3cd"))">
+                                        <option value="1" selected="@(item.Status == 1)">⏳ Đang xử lý</option>
+                                        <option value="2" selected="@(item.Status == 2)">🚚 Đang giao</option>
+                                        <option value="3" selected="@(item.Status == 3)">✅ Đã giao</option>
+                                        <option value="0" selected="@(item.Status == 0)">❌ Đã hủy</option>
+                                    </select>
+                                </form>
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white">
+                                    Xem chi tiết
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -24,11 +24,23 @@ namespace WebBanRauCu.Areas.Admin.Controllers
         }
 
         // GET: Admin/Product
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            // INCLUDE: Lấy kèm thông tin Category để hiển thị tên danh mục
-            var applicationDbContext = _context.Products.Include(p => p.Category);
-            return View(await applicationDbContext.ToListAsync());
+            // 1. Tạo câu truy vấn cơ bản (Chưa chạy xuống Database)
+            var productsQuery = _context.Products.Include(p => p.Category).AsQueryable();
+
+            // 2. Logic tìm kiếm: Nếu ô tìm kiếm không rỗng
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                // Lọc theo tên chứa từ khóa (không phân biệt hoa thường)
+                productsQuery = productsQuery.Where(p => p.Name.Contains(searchString));
+            }
+
+            // 3. Lưu lại từ khóa để hiển thị lại trên View (giữ trạng thái ô input)
+            ViewData["CurrentFilter"] = searchString;
+
+            // 4. Thực thi truy vấn và trả về danh sách
+            return View(await productsQuery.ToListAsync());
         }
 
         // GET: Admin/Product/Details/5

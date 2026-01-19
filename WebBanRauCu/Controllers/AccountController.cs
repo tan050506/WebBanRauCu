@@ -30,17 +30,17 @@ namespace WebBanRauCu.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Username!, model.Password!, model.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    // Kiểm tra Role của người dùng vừa đăng nhập
                     var user = await _userManager.FindByNameAsync(model.Username!);
                     var roles = await _userManager.GetRolesAsync(user!);
 
+                    // --- SỬA ĐOẠN NÀY ---
                     if (roles.Contains("Admin"))
                     {
-                        // Nếu là Admin, chuyển hướng vào trang Index của Admin/Product
-                        return RedirectToAction("Index", "Product", new { area = "Admin" });
+                        // Chuyển hướng đến Dashboard thay vì Product
+                        return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
                     }
+                    // --------------------
 
-                    // Nếu là khách hàng bình thường, quay lại trang cũ hoặc trang chủ
                     return string.IsNullOrEmpty(returnUrl) ? RedirectToAction("Index", "Home") : LocalRedirect(returnUrl);
                 }
                 ModelState.AddModelError("", "Đăng nhập không thành công.");

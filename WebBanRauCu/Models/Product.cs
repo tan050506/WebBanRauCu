@@ -8,19 +8,25 @@ namespace WebBanRauCu.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Vui lòng nhập tên sản phẩm")]
+        [Display(Name = "Tên sản phẩm")]
         public string Name { get; set; }
 
-        public string? Description { get; set; } // Mô tả có thể null
+        [Display(Name = "Mô tả")]
+        public string? Description { get; set; }
 
-        [Required]
-        public double Price { get; set; } // Giá bán
+        [Required(ErrorMessage = "Vui lòng nhập giá bán")]
+        [Range(1000, double.MaxValue, ErrorMessage = "Giá bán phải lớn hơn 1,000đ")] // Kiểm tra số hợp lệ
+        [Display(Name = "Giá bán")]
+        public double Price { get; set; }
 
-        public string? ImageUrl { get; set; } // Đường dẫn ảnh
+        [Display(Name = "Hình ảnh")]
+        public string? ImageUrl { get; set; }
 
-        // Khóa ngoại liên kết với Category
+        [Display(Name = "Danh mục")]
         public int CategoryId { get; set; }
+
         [ForeignKey("CategoryId")]
-        public Category Category { get; set; }
+        public Category? Category { get; set; } // Thêm dấu ? để tránh lỗi validate Category object
     }
 }

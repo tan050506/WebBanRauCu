@@ -1,0 +1,63 @@
+﻿@model IEnumerable<WebBanRauCu.Models.Order>
+
+@{
+    ViewData["Title"] = "Đơn hàng của tôi";
+}
+
+<div class="container py-5">
+    <h2 class="mb-4 text-center">Lịch sử đơn hàng</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            Bạn chưa có đơn hàng nào. <a asp-controller="Home" asp-action="Index">Mua sắm ngay</a>
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Ngày đặt</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>#@item.Id</td>
+                        <td>@item.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td class="text-danger fw-bold">@item.TotalAmount.ToString("#,##0") đ</td>
+                        <td>
+                            @switch (item.Status)
+                            {
+                                case 1:
+                                    <span class="badge bg-warning text-dark">Đang xử lý</span>
+                                    break;
+                                case 2:
+
+                                    <span class="badge bg-primary">Đang giao hàng</span>
+                                    break;
+                                case 3:
+
+                                    <span class="badge bg-success">Đã giao</span>
+                                    break;
+                                case 0:
+
+                                    <span class="badge bg-danger">Đã hủy</span>
+                                    break;
+                                default:
+
+                                    <span class="badge bg-secondary">Không rõ</span>
+                                    break;
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
