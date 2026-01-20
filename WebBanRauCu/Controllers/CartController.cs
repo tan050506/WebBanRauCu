@@ -7,13 +7,12 @@ using WebBanRauCu.Helpers;
 
 namespace WebBanRauCu.Controllers
 {
-    [Authorize] // YÊU CẦU: Bắt buộc đăng nhập mới được vào
+    [Authorize] 
     public class CartController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
 
-        // Tên Session Key dùng chung cho toàn bộ Controller
         private const string CART_KEY = "GioHang";
 
         public CartController(ApplicationDbContext context, UserManager<AppUser> userManager)
@@ -22,14 +21,12 @@ namespace WebBanRauCu.Controllers
             _userManager = userManager;
         }
 
-        // Xem giỏ hàng
         public IActionResult Index()
         {
             var cart = HttpContext.Session.Get<List<CartItem>>(CART_KEY) ?? new List<CartItem>();
             return View(cart);
         }
 
-        // Thêm vào giỏ hàng
         public IActionResult AddToCart(int id)
         {
             var cart = HttpContext.Session.Get<List<CartItem>>(CART_KEY) ?? new List<CartItem>();
@@ -59,7 +56,6 @@ namespace WebBanRauCu.Controllers
             return RedirectToAction("Index");
         }
 
-        // Tăng/Giảm số lượng sản phẩm (Đã sửa lỗi Session Key)
         public IActionResult UpdateQuantity(int id, int amount)
         {
             var cart = HttpContext.Session.Get<List<CartItem>>(CART_KEY) ?? new List<CartItem>();
@@ -70,7 +66,7 @@ namespace WebBanRauCu.Controllers
                 item.Quantity += amount;
                 if (item.Quantity <= 0)
                 {
-                    cart.Remove(item); // Nếu giảm xuống 0 hoặc âm thì xóa khỏi giỏ
+                    cart.Remove(item); 
                 }
             }
 
@@ -78,7 +74,6 @@ namespace WebBanRauCu.Controllers
             return RedirectToAction("Index");
         }
 
-        // Xóa sản phẩm khỏi giỏ
         public IActionResult Remove(int id)
         {
             var cart = HttpContext.Session.Get<List<CartItem>>(CART_KEY);
@@ -94,10 +89,7 @@ namespace WebBanRauCu.Controllers
             return RedirectToAction("Index");
         }
 
-        // ==========================================
         // KHU VỰC THANH TOÁN
-        // ==========================================
-
         [HttpGet]
         public async Task<IActionResult> Checkout()
         {
@@ -157,13 +149,10 @@ namespace WebBanRauCu.Controllers
             }
             await _context.SaveChangesAsync();
 
-            // Xóa giỏ hàng sau khi đặt thành công
             HttpContext.Session.Remove(CART_KEY);
 
             return RedirectToAction("MyOrders");
         }
-
-        // Xem lịch sử đơn hàng
         public async Task<IActionResult> MyOrders()
         {
             var user = await _userManager.GetUserAsync(User);

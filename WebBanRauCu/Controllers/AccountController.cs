@@ -33,13 +33,10 @@ namespace WebBanRauCu.Controllers
                     var user = await _userManager.FindByNameAsync(model.Username!);
                     var roles = await _userManager.GetRolesAsync(user!);
 
-                    // --- SỬA ĐOẠN NÀY ---
                     if (roles.Contains("Admin"))
                     {
-                        // Chuyển hướng đến Dashboard thay vì Product
                         return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
                     }
-                    // --------------------
 
                     return string.IsNullOrEmpty(returnUrl) ? RedirectToAction("Index", "Home") : LocalRedirect(returnUrl);
                 }

@@ -26,20 +26,15 @@ namespace WebBanRauCu.Areas.Admin.Controllers
         // GET: Admin/Product
         public async Task<IActionResult> Index(string searchString)
         {
-            // 1. Tạo câu truy vấn cơ bản (Chưa chạy xuống Database)
             var productsQuery = _context.Products.Include(p => p.Category).AsQueryable();
 
-            // 2. Logic tìm kiếm: Nếu ô tìm kiếm không rỗng
             if (!string.IsNullOrEmpty(searchString))
             {
-                // Lọc theo tên chứa từ khóa (không phân biệt hoa thường)
                 productsQuery = productsQuery.Where(p => p.Name.Contains(searchString));
             }
 
-            // 3. Lưu lại từ khóa để hiển thị lại trên View (giữ trạng thái ô input)
             ViewData["CurrentFilter"] = searchString;
 
-            // 4. Thực thi truy vấn và trả về danh sách
             return View(await productsQuery.ToListAsync());
         }
 
@@ -74,10 +69,8 @@ namespace WebBanRauCu.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product, IFormFile? file)
         {
-            // --- QUAN TRỌNG: Bỏ qua validation cho Category và ImageUrl ---
             ModelState.Remove("Category");
             ModelState.Remove("ImageUrl");
-            // -------------------------------------------------------------
 
             if (ModelState.IsValid)
             {
@@ -85,7 +78,6 @@ namespace WebBanRauCu.Areas.Admin.Controllers
 
                 if (file != null)
                 {
-                    // Xử lý lưu file ảnh
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                     string productPath = Path.Combine(wwwRootPath, @"images\products");
 
@@ -96,12 +88,10 @@ namespace WebBanRauCu.Areas.Admin.Controllers
                         await file.CopyToAsync(fileStream);
                     }
 
-                    // Lưu đường dẫn vào database
                     product.ImageUrl = @"\images\products\" + fileName;
                 }
                 else
                 {
-                    // Nếu không chọn ảnh, có thể gán null hoặc ảnh mặc định
                     product.ImageUrl = "";
                 }
 
@@ -110,7 +100,6 @@ namespace WebBanRauCu.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Nếu lỗi, load lại dropdown danh mục
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
@@ -142,7 +131,6 @@ namespace WebBanRauCu.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            // Bỏ qua validation khi Edit
             ModelState.Remove("Category");
             ModelState.Remove("ImageUrl");
 
@@ -150,7 +138,6 @@ namespace WebBanRauCu.Areas.Admin.Controllers
             {
                 try
                 {
-                    // Nếu người dùng chọn ảnh mới
                     if (file != null)
                     {
                         string wwwRootPath = _webHostEnvironment.WebRootPath;
@@ -167,10 +154,6 @@ namespace WebBanRauCu.Areas.Admin.Controllers
                     }
                     else
                     {
-                        // Nếu không chọn ảnh mới, giữ nguyên ảnh cũ (cần query lại database để lấy ảnh cũ)
-                        // Đây là cách đơn giản nhất: Không cập nhật trường ImageUrl nếu nó null
-                        // Tuy nhiên để code ngắn gọn, ở đây mình tạm chấp nhận logic hiện tại. 
-                        // *Lưu ý: Để giữ ảnh cũ chuẩn nhất, bạn nên dùng AsNoTracking() để lấy ảnh cũ trước khi update*
                     }
 
                     _context.Update(product);
@@ -220,7 +203,6 @@ namespace WebBanRauCu.Areas.Admin.Controllers
             var product = await _context.Products.FindAsync(id);
             if (product != null)
             {
-                // Xóa ảnh trong thư mục (nếu muốn dọn dẹp sạch sẽ)
                 if (!string.IsNullOrEmpty(product.ImageUrl))
                 {
                     var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, product.ImageUrl.TrimStart('\\'));

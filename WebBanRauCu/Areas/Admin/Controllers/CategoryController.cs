@@ -19,7 +19,6 @@ namespace WebBanRauCu.Areas.Admin.Controllers
         // GET: Admin/Category
         public async Task<IActionResult> Index()
         {
-            // Sắp xếp tăng dần theo DisplayOrder
             return View(await _context.Categories.OrderBy(c => c.DisplayOrder).ToListAsync());
         }
 
@@ -36,7 +35,6 @@ namespace WebBanRauCu.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                // 1. Kiểm tra trùng TÊN
                 var isDuplicateName = await _context.Categories.AnyAsync(c => c.Name == category.Name);
                 if (isDuplicateName)
                 {
@@ -44,7 +42,6 @@ namespace WebBanRauCu.Areas.Admin.Controllers
                     return View(category);
                 }
 
-                // 2. Kiểm tra trùng THỨ TỰ (Mới thêm)
                 var isDuplicateOrder = await _context.Categories.AnyAsync(c => c.DisplayOrder == category.DisplayOrder);
                 if (isDuplicateOrder)
                 {
@@ -52,7 +49,6 @@ namespace WebBanRauCu.Areas.Admin.Controllers
                     return View(category);
                 }
 
-                // 3. Kiểm tra số âm
                 if (category.DisplayOrder < 0)
                 {
                     ModelState.AddModelError("DisplayOrder", "Thứ tự hiển thị không được là số âm.");
@@ -84,7 +80,6 @@ namespace WebBanRauCu.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                // 1. Kiểm tra trùng TÊN (Trừ chính nó ra)
                 var isDuplicateName = await _context.Categories.AnyAsync(c => c.Name == category.Name && c.Id != id);
                 if (isDuplicateName)
                 {
@@ -92,7 +87,6 @@ namespace WebBanRauCu.Areas.Admin.Controllers
                     return View(category);
                 }
 
-                // 2. Kiểm tra trùng THỨ TỰ (Mới thêm - Trừ chính nó ra)
                 var isDuplicateOrder = await _context.Categories.AnyAsync(c => c.DisplayOrder == category.DisplayOrder && c.Id != id);
                 if (isDuplicateOrder)
                 {

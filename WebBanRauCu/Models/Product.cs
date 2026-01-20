@@ -16,7 +16,7 @@ namespace WebBanRauCu.Models
         public string? Description { get; set; }
 
         [Required(ErrorMessage = "Vui lòng nhập giá bán")]
-        [Range(1000, double.MaxValue, ErrorMessage = "Giá bán phải lớn hơn 1,000đ")] // Kiểm tra số hợp lệ
+        [Range(1000, double.MaxValue, ErrorMessage = "Giá bán phải lớn hơn 1,000đ")] 
         [Display(Name = "Giá bán")]
         public double Price { get; set; }
 
@@ -27,6 +27,6 @@ namespace WebBanRauCu.Models
         public int CategoryId { get; set; }
 
         [ForeignKey("CategoryId")]
-        public Category? Category { get; set; } // Thêm dấu ? để tránh lỗi validate Category object
+        public Category? Category { get; set; } 
     }
 }

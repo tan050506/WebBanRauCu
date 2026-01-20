@@ -16,8 +16,8 @@ namespace WebBanRauCu.Models
         [ForeignKey("ProductId")]
         public Product Product { get; set; }
 
-        public int Quantity { get; set; } // Số lượng mua
+        public int Quantity { get; set; } 
 
-        public double Price { get; set; } // Giá tại thời điểm mua
+        public double Price { get; set; } 
     }
 }

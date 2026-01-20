@@ -16,14 +16,12 @@ namespace WebBanRauCu.Areas.Admin.Controllers
             _context = context;
         }
 
-        // Danh sách đơn hàng
         public async Task<IActionResult> Index()
         {
             var orders = await _context.Orders.OrderByDescending(o => o.OrderDate).ToListAsync();
             return View(orders);
         }
 
-        // Xem chi tiết đơn hàng
         public async Task<IActionResult> Details(int id)
         {
             var order = await _context.Orders
@@ -36,7 +34,6 @@ namespace WebBanRauCu.Areas.Admin.Controllers
             return View(order);
         }
 
-        // Cập nhật trạng thái đơn hàng (Xử lý AJAX hoặc Form Post)
         [HttpPost]
         public async Task<IActionResult> UpdateStatus(int id, int status)
         {
@@ -46,7 +43,7 @@ namespace WebBanRauCu.Areas.Admin.Controllers
                 order.Status = status;
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction(nameof(Index)); // Load lại trang sau khi update
+            return RedirectToAction(nameof(Index)); 
         }
     }
 }

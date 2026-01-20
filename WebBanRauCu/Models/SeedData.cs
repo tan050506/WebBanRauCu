@@ -10,7 +10,6 @@ namespace WebBanRauCu.Models
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
 
-            // 1. Tạo các Role nếu chưa có
             string[] roleNames = { "Admin", "Customer" };
             foreach (var roleName in roleNames)
             {
@@ -20,7 +19,7 @@ namespace WebBanRauCu.Models
                 }
             }
 
-            // 2. Tạo tài khoản Admin mặc định
+            // tài khoản Admin mặc định: admin@webbanraucu.com
             var adminEmail = "admin@webbanraucu.com";
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
@@ -35,7 +34,7 @@ namespace WebBanRauCu.Models
                     EmailConfirmed = true
                 };
 
-                // Mật khẩu Admin (Bạn nên đổi sau khi đăng nhập)
+                // Mật khẩu Admin mặc định: Admin@123
                 var result = await userManager.CreateAsync(admin, "Admin@123");
                 if (result.Succeeded)
                 {

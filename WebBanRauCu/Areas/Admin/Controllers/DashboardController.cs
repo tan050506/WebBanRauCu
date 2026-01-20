@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebBanRauCu.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")] // Chỉ Admin mới được vào
+    [Authorize(Roles = "Admin")] 
     public class DashboardController : Controller
     {
         public IActionResult Index()

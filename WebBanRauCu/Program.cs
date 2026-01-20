@@ -12,7 +12,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// 2. Cấu hình Identity (Sử dụng AddIdentity thay vì AddDefaultIdentity)
+// 2. Cấu hình Identity 
 builder.Services.AddIdentity<AppUser, IdentityRole>(options => {
     options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequireDigit = false; 
@@ -23,10 +23,10 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options => {
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
-// Đăng ký Razor Pages (Identity mặc định cần cái này)
+// Đăng ký Razor Pages 
 builder.Services.AddRazorPages();
 
-// 3. Đăng ký dịch vụ Session (QUAN TRỌNG)
+// 3. Đăng ký dịch vụ Session
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -45,19 +45,19 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// QUAN TRỌNG: Thêm dòng này để load được ảnh sản phẩm bạn upload vào wwwroot
+//dòng này để load được ảnh sản phẩm bạn upload vào wwwroot
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthorization();
 
-// 4. Kích hoạt Session (QUAN TRỌNG: Phải đặt trước MapControllerRoute)
+// 4. Kích hoạt Session 
 app.UseSession();
 
 app.MapStaticAssets();
 
-// Route cho Admin (Đặt TRÊN route mặc định)
+// Route cho Admin 
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");

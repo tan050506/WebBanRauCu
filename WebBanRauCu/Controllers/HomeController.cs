@@ -18,7 +18,6 @@ namespace WebBanRauCu.Controllers
 
         public async Task<IActionResult> Index(string searchString)
         {
-            // CHỐT CHẶN: Nếu đã đăng nhập và là Admin thì không cho xem trang chủ
             if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
             {
                 return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
@@ -38,7 +37,6 @@ namespace WebBanRauCu.Controllers
 
         public async Task<IActionResult> FilterByCat(int id)
         {
-            // CHỐT CHẶN: Áp dụng tương tự cho trang lọc theo danh mục
             if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
             {
                 return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
@@ -51,8 +49,6 @@ namespace WebBanRauCu.Controllers
 
             return View("Index", products);
         }
-
-        // Các hàm Privacy và Error giữ nguyên...
         public IActionResult Privacy() { return View(); }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

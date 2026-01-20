@@ -7,7 +7,6 @@
         </a>
         @foreach (var item in Model)
         {
-            @* Tính toán Hue dựa trên ID để mỗi ID có 1 màu khác nhau *@
             var hue = (item.Id * 137) % 360;
             
             <a asp-controller="Home" asp-action="FilterByCat" asp-route-id="@item.Id" 

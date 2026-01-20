@@ -9,8 +9,8 @@ namespace WebBanRauCu.Models
 
         [Required(ErrorMessage = "Tên danh mục không được để trống")]
         [StringLength(100)]
-        public string Name { get; set; } // Ví dụ: Rau ăn lá, Củ quả
+        public string Name { get; set; } 
 
-        public int DisplayOrder { get; set; } // Thứ tự hiển thị
+        public int DisplayOrder { get; set; }
     }
 }
